@@ -53,7 +53,7 @@ const CreateTodos = () => {
                 },
                 body: JSON.stringify(data),
             })
-            router.push("/")
+            router.push("/todos")
         } catch (error) {
             console.error(error)
         }
