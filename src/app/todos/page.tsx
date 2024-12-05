@@ -4,34 +4,9 @@ import React from 'react'
 import { FaRegTrashAlt } from 'react-icons/fa'
 import { HiOutlinePencilAlt } from 'react-icons/hi'
 import { Todos } from '../types/types'
+import { format } from 'date-fns'
 
 const Todos = async () => {
-    // const todos = [
-    //     {
-    //         id: 1,
-    //         title: 'todo1',
-    //         content: "content1",
-    //         dueDate: "2024/12/12"
-    //     },
-    //     {
-    //         id: 2,
-    //         title: 'todo2',
-    //         content: "content2",
-    //         dueDate: "2024/12/12"
-    //     },
-    //     {
-    //         id: 3,
-    //         title: 'todo3',
-    //         content: "content3",
-    //         dueDate: "2024/12/12"
-    //     },
-    //     {
-    //         id: 4,
-    //         title: 'todo4',
-    //         content: "content4",
-    //         dueDate: "2024/12/12"
-    //     },
-    // ]
 
     async function getAllTodos() {
         const response = await fetch("http://localhost:3000/api/todos", {
@@ -55,10 +30,10 @@ const Todos = async () => {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p>{todo.content}</p>
+                            <p>{todo.content.length > 50 ? `${todo.content.slice(0, 50)}...` : todo.content}</p>
                         </CardContent>
                         <CardFooter className='flex justify-between'>
-                            <span className='text-sm'>期限：{todo.due_date}</span>
+                            <span className='text-sm'>期限：{format(new Date(todo.due_date), 'yyyy/MM/dd')}</span>
                             <div className='flex gap-1'>
                                 <Link href={`/todos/${todo.id}/edit`}>
                                     <HiOutlinePencilAlt className='hover:opacity-70' />
