@@ -48,7 +48,7 @@ const Todos = async () => {
         <div className="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 p-4 w-full ">
             {
                 todos.map((todo) => (
-                    <Card key={todo.id} className="w-full">
+                    <Card key={todo.id} className="w-full h-64 flex flex-col justify-between">
                         <CardHeader>
                             <CardTitle>
                                 <Link href={`/todos/${todo.id}`} className='hover:opacity-60'>{todo.title}</Link>

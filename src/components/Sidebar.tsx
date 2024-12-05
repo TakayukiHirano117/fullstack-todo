@@ -8,10 +8,13 @@ const Sidebar = () => {
                 <span className='text-sm'>メールアドレス</span>
                 <p className='text-lg'>ユーザー名</p>
             </div>
-            <nav>
-                <ul className='mt-4'>
+            <nav className='mt-4'>
+                <ul className='mt-4 flex flex-col gap-2'>
                     <li className=''>
-                        <Link href={"/todos"} className='text-slate-50 text-xl font-bold hover:text-slate-300'>All Todos</Link>
+                        <Link href={"/todos"} className='text-slate-50 text-xl font-bold hover:text-slate-300'>Todo一覧</Link>
+                    </li>
+                    <li className=''>
+                        <Link href={"/todos/create"} className='text-slate-50 text-xl font-bold hover:text-slate-300'>Todo作成</Link>
                     </li>
                 </ul>
             </nav>
