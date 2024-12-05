@@ -4,6 +4,11 @@ import React from 'react'
 const Sidebar = () => {
     return (
         <div className='w-2/12 h-screen border-r flex flex-col p-2 relative bg-slate-800'>
+            <div className='my-4'>
+                <Link href={"/"}>
+                    <h1 className='text-slate-50 text-2xl'>Fullstack Todo</h1>
+                </Link>
+            </div>
             <div className='text-slate-50'>
                 <span className='text-sm'>メールアドレス</span>
                 <p className='text-lg'>ユーザー名</p>

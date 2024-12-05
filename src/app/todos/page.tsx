@@ -29,7 +29,7 @@ const Todos = async () => {
                                 <Link href={`/todos/${todo.id}`} className='hover:opacity-60'>{todo.title}</Link>
                             </CardTitle>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className='break-words'>
                             <p>{todo.content.length > 50 ? `${todo.content.slice(0, 50)}...` : todo.content}</p>
                         </CardContent>
                         <CardFooter className='flex justify-between'>
