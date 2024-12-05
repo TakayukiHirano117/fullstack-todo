@@ -1,7 +1,7 @@
 import prisma from "@/lib/prismaClient";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const allBBSPosts = await prisma.todos.findMany();
 
   return NextResponse.json(allBBSPosts);
