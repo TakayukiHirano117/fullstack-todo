@@ -3,10 +3,10 @@ import Link from 'next/link'
 import React from 'react'
 import { FaRegTrashAlt } from 'react-icons/fa'
 import { HiOutlinePencilAlt } from 'react-icons/hi'
-import { Todos } from '../types/types'
+import { Todo } from '../types/types'
 import { format } from 'date-fns'
 
-const Todos = async () => {
+const AllTodos = async () => {
 
     async function getAllTodos() {
         const response = await fetch("http://localhost:3000/api/todos", {
@@ -17,7 +17,7 @@ const Todos = async () => {
         return allTodos
     }
 
-    const todos: Todos[] = await getAllTodos()
+    const todos: Todo[] = await getAllTodos()
 
     return (
         <div className="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 p-4 w-full ">
@@ -30,7 +30,7 @@ const Todos = async () => {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className='break-words'>
-                            <p>{todo.content.length > 50 ? `${todo.content.slice(0, 50)}...` : todo.content}</p>
+                            <p>{todo.content.length > 30 ? `${todo.content.slice(0, 30)}...` : todo.content}</p>
                         </CardContent>
                         <CardFooter className='flex justify-between'>
                             <span className='text-sm'>期限：{format(new Date(todo.due_date), 'yyyy/MM/dd')}</span>
@@ -51,4 +51,4 @@ const Todos = async () => {
     )
 }
 
-export default Todos
+export default AllTodos
