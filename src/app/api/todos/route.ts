@@ -2,9 +2,9 @@ import prisma from "@/lib/prismaClient";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-  const allBBSPosts = await prisma.todos.findMany();
+  const allTodos = await prisma.todos.findMany();
 
-  return NextResponse.json(allBBSPosts);
+  return NextResponse.json(allTodos);
 }
 
 export async function POST(req: NextRequest) {
