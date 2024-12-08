@@ -1,10 +1,12 @@
 'use client'
 
+// import SupabaseListerner from '@/components/supabase-listener'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
+import { createClient } from '@supabase/supabase-js'
+import { redirect, useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -16,9 +18,7 @@ export const formSchema = z.object({
     .min(8, { message: 'パスワードは8文字以上で入力してください' }),
 })
 
-const Signup = () => {
-
-  const router = useRouter()
+const Signin = () => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -28,17 +28,20 @@ const Signup = () => {
     },
   })
 
-
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await fetch("http://localhost:3000/api/auth/signup/", {
+      const res = await fetch("http://localhost:3000/api/auth/signin/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       })
-      router.push("/signin")
+
+      const {user} = await res.json()
+
+      console.log(user)
+
     } catch (error) {
       console.error(error)
     }
@@ -47,6 +50,7 @@ const Signup = () => {
   
   return (
     <div className='p-8'>
+      {/* <SupabaseListerner /> */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-1/2">
           <FormField
@@ -56,7 +60,7 @@ const Signup = () => {
               <FormItem>
                 <FormLabel>メールアドレス</FormLabel>
                 <FormControl>
-                  <Input placeholder="メールアドレス" {...field} />
+                  <Input type='email' placeholder="メールアドレス" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -82,4 +86,4 @@ const Signup = () => {
   )
 }
 
-export default Signup
+export default Signin
