@@ -1,17 +1,22 @@
 import prisma from "@/lib/prismaClient";
-import { createClient } from "@supabase/supabase-js";
+// import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "../../../../utils/supabase/server";
 
-export async function GET() {
+export const GET = async (req: NextRequest) => {
   const allTodos = await prisma.todos.findMany();
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  // const supabase = createClient(
+  //   process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  //   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  // );
 
-  const {data} = await supabase.auth.getUser();
-  console.log(data);
+  // const {data} = await supabase.auth.getUser();
+  // console.log(data);
+
+  const supabase = await createClient();
+
+  console.log(await supabase.auth.getUser());
 
   return NextResponse.json(allTodos);
 }
@@ -19,10 +24,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   console.log(req);
   const { title, content, due_date } = await req.json();
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const supabase = await createClient();
 
   const { data } = await supabase.auth.getUser();
   console.log(data);

@@ -5,8 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createClient } from '@supabase/supabase-js'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -20,6 +19,8 @@ export const formSchema = z.object({
 
 const Signin = () => {
 
+  const router = useRouter()
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -30,24 +31,24 @@ const Signin = () => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const res = await fetch("http://localhost:3000/api/auth/signin/", {
+      await fetch("http://localhost:3000/api/auth/signin/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       })
-
-      const {user} = await res.json()
-
-      console.log(user)
+router.push("/")
+      
+      // const { user } = await res.json()
+      // console.log(user)
 
     } catch (error) {
       console.error(error)
     }
   }
-  
-  
+
+
   return (
     <div className='p-8'>
       {/* <SupabaseListerner /> */}
