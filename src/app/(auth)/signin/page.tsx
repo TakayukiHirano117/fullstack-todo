@@ -38,7 +38,7 @@ const Signin = () => {
         },
         body: JSON.stringify(data),
       })
-router.push("/")
+      router.push("/")
       
       // const { user } = await res.json()
       // console.log(user)
