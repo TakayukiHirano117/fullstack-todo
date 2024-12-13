@@ -11,6 +11,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { Todo } from "../types/types";
 import { format } from "date-fns";
+import axios from "axios";
 // import { createClient } from '../../../../utils/supabase/client'
 
 const AllTodos = async () => {
@@ -23,17 +24,19 @@ const AllTodos = async () => {
   // console.log(session)
 
   async function getAllTodos() {
-    const response = await fetch("http://localhost:3000/api/todos", {
-      method: "GET",
-      cache: "no-store",
-      credentials: "same-origin"
-    });
+    // const response = await fetch("http://localhost:3000/api/todos", {
+    //   method: "GET",
+    //   cache: "no-store",
+    //   credentials: "include",
+    // });
 
+    const response = await axios.get("http://localhost:3000/api/todos")
 
-    console.log(response)
+    // console.log(response)
     
-    const allTodos = await response.json();
-    return allTodos;
+    // const allTodos = await response.json();
+    // return allTodos;
+    return response.data
   }
 
   const todos: Todo[] = await getAllTodos();
