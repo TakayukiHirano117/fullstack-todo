@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
   const { data } = await supabase.auth.getUser();
 
-  console.log(data);
+  console.log('user data in get todos api', data);
   const allTodos = await prisma.todos.findMany();
 
   return NextResponse.json(allTodos);
