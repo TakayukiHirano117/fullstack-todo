@@ -9,9 +9,9 @@ import Link from "next/link";
 import React from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiOutlinePencilAlt } from "react-icons/hi";
-import { Todo } from "../types/types";
 import { format } from "date-fns";
-import axios from "axios";
+import { cookies } from "next/headers";
+import { Todo } from "@/app/types/types";
 // import { createClient } from '../../../../utils/supabase/client'
 
 const AllTodos = async () => {
@@ -22,21 +22,24 @@ const AllTodos = async () => {
   // } = await supabase.auth.getSession();
 
   // console.log(session)
+  const cookieStore = await cookies();
+  const cookie = cookieStore.getAll();
+  const keyValuesString = cookie.map((element) => `${element.name}=${element.value}`).join('; ');
 
   async function getAllTodos() {
-    // const response = await fetch("http://localhost:3000/api/todos", {
-    //   method: "GET",
-    //   cache: "no-store",
-    //   credentials: "include",
-    // });
+    const response = await fetch("http://localhost:3000/api/todos", {
+      method: "GET",
+      cache: "no-store",
+      credentials: "same-origin",
+      headers: {
+        Cookie: keyValuesString,
+      },
+    });
 
-    const response = await axios.get("http://localhost:3000/api/todos")
-
-    // console.log(response)
+    console.log(response)
     
-    // const allTodos = await response.json();
-    // return allTodos;
-    return response.data
+    const allTodos = await response.json();
+    return allTodos;
   }
 
   const todos: Todo[] = await getAllTodos();

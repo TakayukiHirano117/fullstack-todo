@@ -13,10 +13,10 @@ export async function GET(req: NextRequest) {
 
   // console.log(await supabase.auth.getUser());
 
-  // const { data, error } = await supabase.auth.getUser();
+  const { data, error } = await supabase.auth.getUser();
 
-  // console.log(error);
-  // console.log(data);
+  console.log('user data in get todos api', data);
+
   const allTodos = await prisma.todos.findMany();
 
   return NextResponse.json(allTodos, {
