@@ -2,9 +2,12 @@ import prisma from "@/lib/prismaClient";
 // import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "../../../../utils/supabase/server";
+import { cookies } from "next/headers";
 
 export async function GET(req: NextRequest) {
 
+  const cookieStore = await cookies();
+  console.log("🚀 ~ createClient ~ cookieStore:", cookieStore.getAll());
   // const supabase = await createClient(
   //   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   //   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -15,11 +18,15 @@ export async function GET(req: NextRequest) {
     // console.log(supabase.auth.user());
 
   const { data } = await supabase.auth.getUser();
-
   console.log(data);
+
   const allTodos = await prisma.todos.findMany();
 
-  return NextResponse.json(allTodos);
+  return NextResponse.json(allTodos, {
+    headers: {
+      "Cache-Control": "no-store",
+    },
+  });
 }
 
 export async function POST(req: NextRequest) {

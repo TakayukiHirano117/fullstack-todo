@@ -9,8 +9,8 @@ import Link from "next/link";
 import React from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiOutlinePencilAlt } from "react-icons/hi";
-import { Todo } from "../types/types";
 import { format } from "date-fns";
+import { Todo } from "@/app/types/types";
 // import { createClient } from '../../../../utils/supabase/client'
 
 const AllTodos = async () => {
@@ -26,11 +26,8 @@ const AllTodos = async () => {
     const response = await fetch("http://localhost:3000/api/todos", {
       method: "GET",
       cache: "no-store",
-      credentials: "same-origin"
+      credentials: "include"
     });
-
-
-    console.log(response)
     
     const allTodos = await response.json();
     return allTodos;
