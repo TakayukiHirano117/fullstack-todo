@@ -12,3 +12,20 @@ export async function GET(
 
   return NextResponse.json(todo);
 }
+
+
+export async function PUT() {
+  
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id;
+  const todo = await prisma.todos.delete({
+    where: { id: parseInt(id) },
+  });
+
+  return NextResponse.json(todo);
+}

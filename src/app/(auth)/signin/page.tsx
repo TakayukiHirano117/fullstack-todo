@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createClient } from '@supabase/supabase-js'
-import { redirect, useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -20,6 +20,8 @@ export const formSchema = z.object({
 
 const Signin = () => {
 
+  const router = useRouter()
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -30,29 +32,38 @@ const Signin = () => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const res = await fetch("http://localhost:3000/api/auth/signin/", {
+      await fetch("http://localhost:3000/api/auth/signin/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       })
-
-      const {user} = await res.json()
-
-      console.log(user)
+      router.push("/")
+      
+      // const { user } = await res.json()
+      // console.log(user)
 
     } catch (error) {
       console.error(error)
     }
   }
-  
-  
+
+
   return (
-    <div className='p-8'>
+    <div className="p-8 w-1/2">
+      <div className="flex justify-between my-2 items-center">
+        <h1 className="text-4xl">Sign In</h1>
+        <Link href={"/signup"} className="text-blue-500 underline hover:text-blue-900 duration-300 text-lg">
+          Sign Up
+        </Link>
+      </div>
       {/* <SupabaseListerner /> */}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-1/2">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8"
+        >
           <FormField
             control={form.control}
             name="email"
@@ -60,7 +71,7 @@ const Signin = () => {
               <FormItem>
                 <FormLabel>メールアドレス</FormLabel>
                 <FormControl>
-                  <Input type='email' placeholder="メールアドレス" {...field} />
+                  <Input type="email" placeholder="メールアドレス" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -83,7 +94,7 @@ const Signin = () => {
         </form>
       </Form>
     </div>
-  )
+  );
 }
 
 export default Signin
