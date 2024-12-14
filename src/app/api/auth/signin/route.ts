@@ -5,7 +5,7 @@ export const POST = async (req: NextRequest) => {
     const { email, password } = await req.json();
 
     // console.log(req)
-    console.log(req.cookies.getAll());
+    // console.log(req.cookies.getAll());
 
     const supabase = await createClient();
 
@@ -20,6 +20,7 @@ export const POST = async (req: NextRequest) => {
     // console.log(await supabase.auth.getUser())
 
     if (error) {
+      console.log(error)
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 

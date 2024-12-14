@@ -15,16 +15,23 @@ export async function GET(req: NextRequest) {
 
   const supabase = await createClient();
 
-    // console.log(supabase.auth.user());
+  // console.log(await supabase.auth.getUser());
 
-  const { data } = await supabase.auth.getUser();
-  console.log(data);
+  const { data, error } = await supabase.auth.getUser();
 
-  const allTodos = await prisma.todos.findMany();
+  // console.log('user data in get todos api', data);
+  console.log('id: ', data.user!.id);
+
+  const allTodos = await prisma.todos.findMany({
+    where: {
+      user_id: data.user!.id,
+    },
+  });
 
   return NextResponse.json(allTodos, {
     headers: {
-      "Cache-Control": "no-store",
+      "Access-Control-Allow-Origin": "http://localhost:3000", // クライアントのURL
+      "Access-Control-Allow-Credentials": "true", // クッキー送信を許可
     },
   });
 }
@@ -32,15 +39,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const { title, content, due_date } = await req.json();
 
-  // const supabase = await createClient(
-  //   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  //   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  // );
-
   const supabase = await createClient();
 
   const { data } = await supabase.auth.getUser();
-
 
   console.log(data);
 
@@ -49,7 +50,7 @@ export async function POST(req: NextRequest) {
       title,
       content,
       due_date,
-      profile_id: data.user!.id,
+      user_id: data.user!.id,
     },
   });
 

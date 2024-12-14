@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
@@ -50,10 +51,19 @@ const Signin = () => {
 
 
   return (
-    <div className='p-8'>
+    <div className="p-8 w-1/2">
+      <div className="flex justify-between my-2 items-center">
+        <h1 className="text-4xl">Sign In</h1>
+        <Link href={"/signup"} className="text-blue-500 underline hover:text-blue-900 duration-300 text-lg">
+          Sign Up
+        </Link>
+      </div>
       {/* <SupabaseListerner /> */}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-1/2">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8"
+        >
           <FormField
             control={form.control}
             name="email"
@@ -61,7 +71,7 @@ const Signin = () => {
               <FormItem>
                 <FormLabel>メールアドレス</FormLabel>
                 <FormControl>
-                  <Input type='email' placeholder="メールアドレス" {...field} />
+                  <Input type="email" placeholder="メールアドレス" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -84,7 +94,7 @@ const Signin = () => {
         </form>
       </Form>
     </div>
-  )
+  );
 }
 
 export default Signin
