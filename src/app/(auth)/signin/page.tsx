@@ -1,6 +1,5 @@
 'use client'
 
-// import SupabaseListerner from '@/components/supabase-listener'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -40,10 +39,6 @@ const Signin = () => {
         body: JSON.stringify(data),
       })
       router.push("/")
-      
-      // const { user } = await res.json()
-      // console.log(user)
-
     } catch (error) {
       console.error(error)
     }
