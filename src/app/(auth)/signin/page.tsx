@@ -49,13 +49,12 @@ const Signin = () => {
     }
   }
 
-
   return (
     <div className="p-8 w-1/2">
       <div className="flex justify-between my-2 items-center">
-        <h1 className="text-4xl">Sign In</h1>
+        <h1 className="text-4xl">ログイン</h1>
         <Link href={"/signup"} className="text-blue-500 underline hover:text-blue-900 duration-300 text-lg">
-          Sign Up
+          ユーザー登録がまだの方はこちら
         </Link>
       </div>
       {/* <SupabaseListerner /> */}
