@@ -23,7 +23,7 @@ const Sidebar = ({ user }: { user: User | null }) => {
             <li className="">
               <Link
                 href={"/todos"}
-                className="text-slate-50 text-xl font-bold duration-300 flex items-center gap-2 hover:bg-slate-700 py-1 px-2 rounded-full"
+                className="text-slate-50 lg:text-xl md:text-sm font-bold duration-300 flex items-center gap-2 hover:bg-slate-700 py-1 px-2 rounded-full"
               >
                 <LuListTodo className="text-slate-50" />
                 Todo一覧
@@ -32,7 +32,7 @@ const Sidebar = ({ user }: { user: User | null }) => {
             <li className="">
               <Link
                 href={"/todos/create"}
-                className="text-slate-50 text-xl font-bold duration-300 flex items-center gap-2 hover:bg-slate-700 py-1 px-2 rounded-full"
+                className="text-slate-50 lg:text-xl md:text-sm font-bold duration-300 flex items-center gap-2 hover:bg-slate-700 py-1 px-2 rounded-full"
               >
                 <IoCreateOutline className="text-slate-50" />
                 Todo作成
