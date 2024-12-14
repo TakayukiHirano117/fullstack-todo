@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -7,39 +9,38 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import React from "react";
+import useSWR from "swr";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { format } from "date-fns";
-import { cookies } from "next/headers";
 import { Todo } from "@/app/types/types";
 
-const AllTodos = async () => {
+const fetcher = async (url: string) => {
+  const response = await fetch(url, {
+    method: "GET",
+    cache: "no-store",
+    credentials: "same-origin",
+  });
+  if (!response.ok) throw new Error("データの取得に失敗しました");
+  return response.json();
+};
 
-  const cookieStore = await cookies();
-  const cookie = cookieStore.getAll();
-  const keyValuesString = cookie.map((element) => `${element.name}=${element.value}`).join('; ');
+const AllTodos = () => {
+  const {
+    data: todos,
+    error,
+    isLoading,
+  } = useSWR<Todo[]>("http://localhost:3000/api/todos", fetcher);
 
-  async function getAllTodos() {
-    const response = await fetch("http://localhost:3000/api/todos", {
-      method: "GET",
-      cache: "no-store",
-      credentials: "same-origin",
-      headers: {
-        Cookie: keyValuesString,
-      },
-    });
+  if (isLoading) return <p>データを読み込んでいます...</p>;
 
-    const allTodos = await response.json();
-    return allTodos;
-  }
-
-  const todos: Todo[] = await getAllTodos();
+  if (error) return <p>エラーが発生しました: {error.message}</p>;
 
   return (
     <div className="p-8 flex flex-col gap-8">
       <h1 className="text-4xl sticky top-0">✅ Todo一覧</h1>
-      <div className="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 w-full ">
-        {todos.map((todo) => (
+      <div className="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 w-full">
+        {todos!.map((todo) => (
           <Card
             key={todo.id}
             className="w-full h-64 flex flex-col justify-between"
