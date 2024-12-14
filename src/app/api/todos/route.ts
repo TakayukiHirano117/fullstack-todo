@@ -6,8 +6,8 @@ import { cookies } from "next/headers";
 
 export async function GET(req: NextRequest) {
   
-  const cookieStore = await cookies();
-  console.log("🚀 ~ createClient ~ cookieStore:", cookieStore.getAll());
+  // const cookieStore = await cookies();
+  // console.log("🚀 ~ createClient ~ cookieStore:", cookieStore.getAll());
 
   const supabase = await createClient();
 
@@ -15,9 +15,14 @@ export async function GET(req: NextRequest) {
 
   const { data, error } = await supabase.auth.getUser();
 
-  console.log('user data in get todos api', data);
+  // console.log('user data in get todos api', data);
+  console.log('id: ', data.user!.id);
 
-  const allTodos = await prisma.todos.findMany();
+  const allTodos = await prisma.todos.findMany({
+    where: {
+      user_id: data.user!.id,
+    },
+  });
 
   return NextResponse.json(allTodos, {
     headers: {
@@ -30,15 +35,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const { title, content, due_date } = await req.json();
 
-  // const supabase = await createClient(
-  //   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  //   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  // );
-
   const supabase = await createClient();
 
   const { data } = await supabase.auth.getUser();
-
 
   console.log(data);
 
@@ -47,7 +46,7 @@ export async function POST(req: NextRequest) {
       title,
       content,
       due_date,
-      profile_id: data.user!.id,
+      user_id: data.user!.id,
     },
   });
 

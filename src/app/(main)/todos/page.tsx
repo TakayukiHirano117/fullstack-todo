@@ -12,16 +12,9 @@ import { HiOutlinePencilAlt } from "react-icons/hi";
 import { format } from "date-fns";
 import { cookies } from "next/headers";
 import { Todo } from "@/app/types/types";
-// import { createClient } from '../../../../utils/supabase/client'
 
 const AllTodos = async () => {
-  // const supabase= await createClient()
-  // const {
-  //   data: { session },
-  //   error,
-  // } = await supabase.auth.getSession();
 
-  // console.log(session)
   const cookieStore = await cookies();
   const cookie = cookieStore.getAll();
   const keyValuesString = cookie.map((element) => `${element.name}=${element.value}`).join('; ');
@@ -36,8 +29,6 @@ const AllTodos = async () => {
       },
     });
 
-    console.log(response)
-    
     const allTodos = await response.json();
     return allTodos;
   }
