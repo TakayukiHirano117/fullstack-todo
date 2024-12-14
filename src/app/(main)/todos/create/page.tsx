@@ -70,7 +70,7 @@ const CreateTodos = () => {
 
   return (
     <div className="p-8">
-      <h1>New Todo</h1>
+      <h1 className="text-4xl mb-8">✅ 新規作成</h1>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
