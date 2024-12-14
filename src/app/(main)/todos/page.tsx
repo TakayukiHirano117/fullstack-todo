@@ -36,41 +36,44 @@ const AllTodos = async () => {
   const todos: Todo[] = await getAllTodos();
 
   return (
-    <div className="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 p-4 w-full ">
-      {todos.map((todo) => (
-        <Card
-          key={todo.id}
-          className="w-full h-64 flex flex-col justify-between"
-        >
-          <CardHeader>
-            <CardTitle>
-              <Link href={`/todos/${todo.id}`} className="hover:opacity-60">
-                {todo.title}
-              </Link>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="break-words">
-            <p>
-              {todo.content.length > 30
-                ? `${todo.content.slice(0, 30)}...`
-                : todo.content}
-            </p>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <span className="text-sm">
-              期限：{format(new Date(todo.due_date), "yyyy/MM/dd")}
-            </span>
-            <div className="flex gap-1">
-              <Link href={`/todos/${todo.id}/edit`}>
-                <HiOutlinePencilAlt className="hover:opacity-70" />
-              </Link>
-              <Link href={`/todos/${todo.id}/delete`}>
-                <FaRegTrashAlt className="hover:opacity-70" />
-              </Link>
-            </div>
-          </CardFooter>
-        </Card>
-      ))}
+    <div className="p-8 flex flex-col gap-8">
+      <h1 className="text-4xl sticky top-0">✅ Todo一覧</h1>
+      <div className="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 w-full ">
+        {todos.map((todo) => (
+          <Card
+            key={todo.id}
+            className="w-full h-64 flex flex-col justify-between"
+          >
+            <CardHeader>
+              <CardTitle>
+                <Link href={`/todos/${todo.id}`} className="hover:opacity-60">
+                  {todo.title}
+                </Link>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="break-words">
+              <p>
+                {todo.content.length > 30
+                  ? `${todo.content.slice(0, 30)}...`
+                  : todo.content}
+              </p>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <span className="text-sm">
+                期限：{format(new Date(todo.due_date), "yyyy/MM/dd")}
+              </span>
+              <div className="flex gap-1">
+                <Link href={`/todos/${todo.id}/edit`}>
+                  <HiOutlinePencilAlt className="hover:opacity-70" />
+                </Link>
+                <Link href={`/todos/${todo.id}/delete`}>
+                  <FaRegTrashAlt className="hover:opacity-70" />
+                </Link>
+              </div>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };

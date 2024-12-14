@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
-// import SupabaseListener from "@/components/supabase-listener";
+import SupabaseListener from "@/components/supabase-listener";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,8 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="flex w-full">
-          {/* <SupabaseListener  /> */}
-          <Sidebar />
+          <SupabaseListener  />
           <main className="w-full">{children}</main>
         </div>
       </body>

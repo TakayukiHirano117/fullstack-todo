@@ -1,24 +1,21 @@
 "use server"
 
-import { createClient } from '@supabase/supabase-js';
+// import { createClient } from '@supabase/supabase-js';
 import React from 'react'
+import { createClient } from '../../utils/supabase/server'
+import Sidebar from './Sidebar'
 
 const SupabaseListener = async () => {
+    const supabase = await createClient()
 
-    const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-
-    // セッションの取得
     const {
-        data: { session },
-    } = await supabase.auth.getSession()
+        data: { user },
+    } = await supabase.auth.getUser()
 
-    console.log(session)
+    console.log(user)
 
     return (
-        <div>SupabaseListerner</div>
+        <Sidebar user={user} />
     )
 }
 
