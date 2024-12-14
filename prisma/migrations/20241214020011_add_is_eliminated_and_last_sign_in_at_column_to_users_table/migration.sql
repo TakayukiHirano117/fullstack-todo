@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "users" ADD COLUMN     "is_eliminated" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "last_sign_in_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
