@@ -55,12 +55,12 @@ const Signup = () => {
   return (
     <div className="p-8 w-1/2">
       <div className="flex justify-between my-2 items-center">
-        <h1 className="text-4xl">Sign Up</h1>
+        <h1 className="text-4xl">新規ユーザー登録</h1>
         <Link
           href={"/signin"}
           className="text-blue-500 underline hover:text-blue-900 duration-300 text-lg"
         >
-          Sign In
+          ログインはこちら
         </Link>
       </div>
       <Form {...form}>
