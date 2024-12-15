@@ -3,6 +3,8 @@ export interface Todo {
   title: string;
   content: string;
   due_date: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
+  status_id: string | null;
+  user_id: string;
 }
