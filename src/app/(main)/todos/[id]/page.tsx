@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { format } from "date-fns";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import React from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiOutlinePencilAlt } from "react-icons/hi";
@@ -22,8 +23,10 @@ const fetcher = async (url: string): Promise<Todo> => {
 };
 
 const TodoDetail = ({ params }: { params: { id: number } }) => {
+  const { id } = useParams();
+  
   const { data, error, isLoading } = useSWR<Todo>(
-    `http://localhost:3000/api/todos/${params.id}`,
+    `http://localhost:3000/api/todos/${id}`,
     fetcher
   );
 

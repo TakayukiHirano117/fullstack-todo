@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const id = params.id;
-  
+
   const todo = await prisma.todos.findUnique({
     where: { id: id },
   });
@@ -14,10 +14,24 @@ export async function GET(
   return NextResponse.json(todo);
 }
 
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id;
+  const { title, content, due_date } = await req.json();
 
-// export async function PUT() {
-  
-// }
+  const todo = await prisma.todos.update({
+    where: { id: id },
+    data: {
+      title,
+      content,
+      due_date,
+    },
+  });
+
+  return NextResponse.json(todo);
+}
 
 // export async function DELETE(
 //   req: NextRequest,
