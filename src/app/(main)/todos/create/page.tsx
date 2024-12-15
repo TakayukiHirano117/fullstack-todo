@@ -75,6 +75,7 @@ const CreateTodos = () => {
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-1/2"
+          method="POST"
         >
           <FormField
             control={form.control}
