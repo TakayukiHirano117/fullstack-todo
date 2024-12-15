@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { memo } from "react";
 import { GoSignOut } from "react-icons/go";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 
-const Signout = () => {
+const Signout = memo(() => {
   const router = useRouter();
 
   const handleSignout = async () => {
@@ -29,6 +29,8 @@ const Signout = () => {
       <GoSignOut className="text-slate-900" />
     </Button>
   );
-};
+});
+
+Signout.displayName = "Signout";
 
 export default Signout;
