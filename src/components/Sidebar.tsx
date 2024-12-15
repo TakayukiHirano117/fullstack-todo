@@ -8,7 +8,7 @@ import { IoCreateOutline } from "react-icons/io5";
 
 const Sidebar = ({ user }: { user: User | null }) => {
   return (
-    <div className="w-2/12 h-screen border-r flex flex-col p-3 relative bg-slate-800 justify-between">
+    <div className="w-2/12 h-screen border-r flex flex-col p-3 relative bg-slate-800 justify-between sticky top-0">
       <div>
         <div className="my-4">
           <Link href={"/"}>

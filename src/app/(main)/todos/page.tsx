@@ -38,7 +38,7 @@ const AllTodos = () => {
 
   return (
     <div className="p-8 flex flex-col gap-8">
-      <h1 className="text-4xl sticky top-0">✅ Todo一覧</h1>
+      <h1 className="text-4xl">✅ Todo一覧</h1>
       <div className="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 w-full">
         {todos!.map((todo) => (
           <Card
