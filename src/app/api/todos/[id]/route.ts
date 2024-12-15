@@ -6,26 +6,41 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const id = params.id;
+
   const todo = await prisma.todos.findUnique({
-    where: { id: parseInt(id) },
+    where: { id: id },
   });
 
   return NextResponse.json(todo);
 }
 
-
-export async function PUT() {
-  
-}
-
-export async function DELETE(
+export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const id = params.id;
-  const todo = await prisma.todos.delete({
-    where: { id: parseInt(id) },
+  const { title, content, due_date } = await req.json();
+
+  const todo = await prisma.todos.update({
+    where: { id: id },
+    data: {
+      title,
+      content,
+      due_date,
+    },
   });
 
   return NextResponse.json(todo);
 }
+
+// export async function DELETE(
+//   req: NextRequest,
+//   { params }: { params: { id: string } }
+// ) {
+//   const id = params.id;
+//   const todo = await prisma.todos.delete({
+//     where: { id: parseInt(id) },
+//   });
+
+//   return NextResponse.json(todo);
+// }
