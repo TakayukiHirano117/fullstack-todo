@@ -96,7 +96,7 @@ const EditTodos = ({ params }: { params: { id: number } }) => {
 
   return (
     <div className="p-8">
-      <h1 className="text-4xl mb-8">✅ 新規作成</h1>
+      <h1 className="text-4xl mb-8">✅ Todo編集</h1>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
