@@ -24,19 +24,44 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import useSWR from "swr";
+
+interface Status {
+  id: string;
+  name: string;
+}
+
+const fetcher = async (url: string): Promise<{ statuses: Status[] }> => {
+  const response = await fetch(url, { cache: "no-store" });
+  if (!response.ok) throw new Error("データの取得に失敗しました");
+  const data = response.json();
+  return data;
+};
 
 export const formSchema = z.object({
   title: z
     .string()
-    .min(2, { message: "タイトルは2文字以上で入力してください" })
-    .max(20, { message: "タイトルは20文字以内で入力してください" }),
+    .min(1, { message: "タイトルは1文字以上で入力してください" })
+    .max(50, { message: "タイトルは50文字以内で入力してください" }),
   content: z
     .string()
-    .min(10, { message: "本文は10文字以上で入力してください" })
-    .max(140, { message: "本文は140文字以内で入力してください" }),
+    .min(1, { message: "本文は1文字以上で入力してください" })
+    .max(140, { message: "本文は100文字以内で入力してください" }),
+  status_id: z.string({
+    required_error: "選択肢を選んでください",
+  }),
   due_date: z
     .date()
-    .refine((date) => date > new Date(), {
+    .refine((date) => date >= new Date(new Date().setHours(0, 0, 0, 0)), {
       message: "未来の日付を入力してください",
     }),
 });
@@ -44,11 +69,17 @@ export const formSchema = z.object({
 const CreateTodos = () => {
   const router = useRouter();
 
+  const { data, error, isLoading } = useSWR<{ statuses: Status[] }>(
+    `http://localhost:3000/api/todos/create`,
+    fetcher
+  );
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       content: "",
+      status_id: "",
       due_date: new Date(),
     },
   });
@@ -67,6 +98,9 @@ const CreateTodos = () => {
       console.error(error);
     }
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>データの取得に失敗しました: {error.message}</div>;
 
   return (
     <div className="p-8">
@@ -105,6 +139,38 @@ const CreateTodos = () => {
           />
           <FormField
             control={form.control}
+            name="status_id"
+            render={({ field }) => (
+              <FormItem>
+                <div>
+                  <FormLabel>ステータス</FormLabel>
+                </div>
+                <FormControl>
+                  <Select
+                    onValueChange={(value) => field.onChange(value)} // React Hook Form の field に値を反映
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="ステータス" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>ステータス</SelectLabel>
+                        {data?.statuses.map((option) => (
+                          <SelectItem key={option.id} value={option.id}>
+                            {option.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="due_date"
             render={({ field }) => (
               <FormItem>
@@ -133,7 +199,7 @@ const CreateTodos = () => {
                       <Calendar
                         mode="single"
                         selected={field.value}
-                        onSelect={(date) => field.onChange(date)} // フォーム状態を更新
+                        onSelect={(date) => field.onChange(date)}
                         initialFocus
                       />
                     </PopoverContent>

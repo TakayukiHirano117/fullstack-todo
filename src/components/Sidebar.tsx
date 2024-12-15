@@ -1,6 +1,6 @@
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
-import React, { useMemo } from "react";
+import React, { memo, useMemo } from "react";
 import Signout from "./auth/Signout";
 import { CiMenuKebab } from "react-icons/ci";
 import { LuListTodo } from "react-icons/lu";
@@ -8,7 +8,7 @@ import { IoCreateOutline } from "react-icons/io5";
 
 
 
-const Sidebar = ({ user }: { user: User | null }) => {
+const Sidebar = memo(({ user }: { user: User | null }) => {
   const navItems = useMemo(
     () => [
       {
@@ -82,6 +82,8 @@ const Sidebar = ({ user }: { user: User | null }) => {
       </div>
     </div>
   );
-};
+});
+
+Sidebar.displayName = "Sidebar";
 
 export default Sidebar;

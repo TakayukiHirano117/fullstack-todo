@@ -24,19 +24,18 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { title, content, due_date } = await req.json();
+  const { title, content, status_id, due_date } = await req.json();
 
   const supabase = await createClient();
 
   const { data } = await supabase.auth.getUser();
-
-  console.log(data);
 
   const post = await prisma.todos.create({
     data: {
       title,
       content,
       due_date,
+      status_id,
       user_id: data.user!.id,
     },
   });
