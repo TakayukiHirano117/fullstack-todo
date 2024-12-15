@@ -1,12 +1,30 @@
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
-import React from "react";
+import React, { memo, useMemo } from "react";
 import Signout from "./auth/Signout";
 import { CiMenuKebab } from "react-icons/ci";
 import { LuListTodo } from "react-icons/lu";
 import { IoCreateOutline } from "react-icons/io5";
 
-const Sidebar = ({ user }: { user: User | null }) => {
+
+
+const Sidebar = memo(({ user }: { user: User | null }) => {
+  const navItems = useMemo(
+    () => [
+      {
+        href: "/todos",
+        label: "Todo一覧",
+        icon: <LuListTodo className="text-slate-50" />,
+      },
+      {
+        href: "/todos/create",
+        label: "Todo作成",
+        icon: <IoCreateOutline className="text-slate-50" />,
+      },
+    ],
+    []
+  );
+  
   return (
     <div className="w-2/12 h-screen border-r flex flex-col p-3 relative bg-slate-800 justify-between sticky top-0">
       <div>
@@ -20,24 +38,20 @@ const Sidebar = ({ user }: { user: User | null }) => {
         <hr />
         <nav className="mt-4">
           <ul className="mt-4 flex flex-col gap-2">
-            <li className="">
-              <Link
-                href={"/todos"}
-                className="text-slate-50 lg:text-xl md:text-sm font-bold duration-300 flex items-center gap-2 hover:bg-slate-700 py-1 px-2 rounded-full"
-              >
-                <LuListTodo className="text-slate-50" />
-                Todo一覧
-              </Link>
-            </li>
-            <li className="">
-              <Link
-                href={"/todos/create"}
-                className="text-slate-50 lg:text-xl md:text-sm font-bold duration-300 flex items-center gap-2 hover:bg-slate-700 py-1 px-2 rounded-full"
-              >
-                <IoCreateOutline className="text-slate-50" />
-                Todo作成
-              </Link>
-            </li>
+            {
+              navItems.map((item) => (
+                <li key={item.href} className="">
+                  <Link
+                    href={item.href}
+                    className="text-slate-50 lg:text-xl md:text-sm font-bold duration-300 flex items-center gap-2 hover:bg-slate-700 py-1 px-2 rounded-full"
+                  >
+                    {item.icon}
+                    {item.label}
+                  </Link>
+                </li>
+                ))
+            }
+
           </ul>
         </nav>
       </div>
@@ -68,6 +82,8 @@ const Sidebar = ({ user }: { user: User | null }) => {
       </div>
     </div>
   );
-};
+});
+
+Sidebar.displayName = "Sidebar";
 
 export default Sidebar;

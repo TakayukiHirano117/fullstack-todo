@@ -1,6 +1,3 @@
-"use server"
-
-import React from 'react'
 import { createClient } from '../../utils/supabase/server'
 import Sidebar from './Sidebar'
 
@@ -15,5 +12,7 @@ const SupabaseListener = async () => {
         <Sidebar user={user} />
     )
 }
+
+SupabaseListener.displayName = 'SupabaseListener'
 
 export default SupabaseListener
