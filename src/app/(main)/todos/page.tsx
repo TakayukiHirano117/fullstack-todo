@@ -118,16 +118,12 @@ const AllTodos = () => {
             <CardHeader>
               <CardTitle>
                 <Link href={`/todos/${todo.id}`} className="hover:opacity-60">
-                  {todo.title}
+                  <p className="truncate">{todo.title}</p>
                 </Link>
               </CardTitle>
             </CardHeader>
             <CardContent className="break-words">
-              <p>
-                {todo.content.length > 30
-                  ? `${todo.content.slice(0, 30)}...`
-                  : todo.content}
-              </p>
+              <p className="truncate">{todo.content}</p>
             </CardContent>
             <CardContent className="break-words">
               <StatusBadge text={todo.statuses.name} />

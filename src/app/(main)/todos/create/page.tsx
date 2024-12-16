@@ -34,11 +34,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useSWR from "swr";
-
-interface Status {
-  id: string;
-  name: string;
-}
+import { Status } from "@/app/types/types";
 
 const fetcher = async (url: string): Promise<{ statuses: Status[] }> => {
   const response = await fetch(url, { cache: "no-store" });
@@ -46,8 +42,6 @@ const fetcher = async (url: string): Promise<{ statuses: Status[] }> => {
   const data = response.json();
   return data;
 };
-
-
 
 const CreateTodos = () => {
   const formSchema = z.object({

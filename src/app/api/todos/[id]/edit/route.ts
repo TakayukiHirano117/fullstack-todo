@@ -11,8 +11,7 @@ export const GET = async (
     where: { id: id },
   });
 
-  // console.log(todo);
-  console.log(todo!.id);
+  const statuses = await prisma.statuses.findMany();
 
-  return NextResponse.json(todo);
+  return NextResponse.json({ todo, statuses });
 };

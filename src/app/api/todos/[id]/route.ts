@@ -24,13 +24,14 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   const id = params.id;
-  const { title, content, due_date } = await req.json();
+  const { title, content, status_id, due_date } = await req.json();
 
   const todo = await prisma.todos.update({
     where: { id: id },
     data: {
       title,
       content,
+      status_id,
       due_date,
     },
   });
