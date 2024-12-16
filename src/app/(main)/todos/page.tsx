@@ -27,6 +27,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import StatusBadge from "@/components/StatusBadge";
 
 const fetcher = async (url: string) => {
   const response = await fetch(url, {
@@ -91,7 +92,9 @@ const AllTodos = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-4xl">✅ Todo一覧</h1>
         <Select
-          onValueChange={(value) => setValue("sortOrder", value as "asc" | "desc")}
+          onValueChange={(value) =>
+            setValue("sortOrder", value as "asc" | "desc")
+          }
           value={sortOrder}
         >
           <SelectTrigger className="w-[180px]">
@@ -125,6 +128,9 @@ const AllTodos = () => {
                   ? `${todo.content.slice(0, 30)}...`
                   : todo.content}
               </p>
+            </CardContent>
+            <CardContent className="break-words">
+              <StatusBadge text={todo.statuses.name} />
             </CardContent>
             <CardFooter className="flex justify-between">
               <span className="text-sm">

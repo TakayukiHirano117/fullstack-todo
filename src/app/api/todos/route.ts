@@ -17,7 +17,12 @@ export async function GET(req: NextRequest) {
     orderBy: {
       created_at: sortOrder as "asc" | "desc",
     },
+    include: {
+      statuses: true,
+    },
   });
+
+  console.log(allTodos);
 
   return NextResponse.json(allTodos, {
     headers: {
