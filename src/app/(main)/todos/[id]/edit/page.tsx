@@ -33,21 +33,21 @@ const fetcher = async (url: string): Promise<Todo> => {
   return response.json();
 };
 
-export const formSchema = z.object({
-  title: z
-    .string()
-    .min(2, { message: "タイトルは2文字以上で入力してください" })
-    .max(20, { message: "タイトルは20文字以内で入力してください" }),
-  content: z
-    .string()
-    .min(10, { message: "本文は10文字以上で入力してください" })
-    .max(140, { message: "本文は140文字以内で入力してください" }),
-  due_date: z.date().refine((date) => date > new Date(), {
-    message: "未来の日付を入力してください",
-  }),
-});
-
 const EditTodos = () => {
+  const formSchema = z.object({
+    title: z
+      .string()
+      .min(2, { message: "タイトルは2文字以上で入力してください" })
+      .max(20, { message: "タイトルは20文字以内で入力してください" }),
+    content: z
+      .string()
+      .min(10, { message: "本文は10文字以上で入力してください" })
+      .max(140, { message: "本文は140文字以内で入力してください" }),
+    due_date: z.date().refine((date) => date > new Date(), {
+      message: "未来の日付を入力してください",
+    }),
+  });
+  
   const { id } = useParams();
   const router = useRouter();
 
