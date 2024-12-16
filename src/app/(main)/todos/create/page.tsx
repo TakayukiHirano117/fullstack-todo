@@ -47,27 +47,28 @@ const fetcher = async (url: string): Promise<{ statuses: Status[] }> => {
   return data;
 };
 
-export const formSchema = z.object({
-  title: z
-    .string()
-    .min(1, { message: "タイトルは1文字以上で入力してください" })
-    .max(50, { message: "タイトルは50文字以内で入力してください" }),
-  content: z
-    .string()
-    .min(1, { message: "本文は1文字以上で入力してください" })
-    .max(140, { message: "本文は100文字以内で入力してください" }),
-  status_id: z
-    .string({
-      required_error: "選択肢を選んでください",
-    }),
-  due_date: z
-    .date()
-    .refine((date) => date >= new Date(new Date().setHours(0, 0, 0, 0)), {
-      message: "未来の日付を入力してください",
-    }),
-});
+
 
 const CreateTodos = () => {
+  const formSchema = z.object({
+    title: z
+      .string()
+      .min(1, { message: "タイトルは1文字以上で入力してください" })
+      .max(50, { message: "タイトルは50文字以内で入力してください" }),
+    content: z
+      .string()
+      .min(1, { message: "本文は1文字以上で入力してください" })
+      .max(140, { message: "本文は100文字以内で入力してください" }),
+    status_id: z.string({
+      required_error: "選択肢を選んでください",
+    }),
+    due_date: z
+      .date()
+      .refine((date) => date >= new Date(new Date().setHours(0, 0, 0, 0)), {
+        message: "未来の日付を入力してください",
+      }),
+  });
+  
   const router = useRouter();
 
   const { data, error, isLoading } = useSWR<{ statuses: Status[] }>(
