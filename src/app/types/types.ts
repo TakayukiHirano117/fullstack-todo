@@ -1,7 +1,6 @@
 export type Status = {
-  id: number;
+  id: string;
   name: string;
-  color: string;
 };
 
 export interface Todo {

@@ -22,8 +22,6 @@ export async function GET(req: NextRequest) {
     },
   });
 
-  console.log(allTodos);
-
   return NextResponse.json(allTodos, {
     headers: {
       "Access-Control-Allow-Origin": "http://localhost:3000",

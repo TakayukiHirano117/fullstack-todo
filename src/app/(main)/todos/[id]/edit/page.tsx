@@ -1,6 +1,6 @@
 "use client";
 
-import { Todo } from "@/app/types/types";
+import { Status, Todo } from "@/app/types/types";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -26,8 +26,12 @@ import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const fetcher = async (url: string): Promise<Todo> => {
+const fetcher = async (url: string): Promise<{
+    todo: Todo;
+    statuses: Status[];
+  }> => {
   const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) throw new Error("データの取得に失敗しました");
   return response.json();
@@ -37,30 +41,38 @@ const EditTodos = () => {
   const formSchema = z.object({
     title: z
       .string()
-      .min(2, { message: "タイトルは2文字以上で入力してください" })
-      .max(20, { message: "タイトルは20文字以内で入力してください" }),
+      .min(1, { message: "タイトルは1文字以上で入力してください" })
+      .max(50, { message: "タイトルは50文字以内で入力してください" }),
     content: z
       .string()
-      .min(10, { message: "本文は10文字以上で入力してください" })
-      .max(140, { message: "本文は140文字以内で入力してください" }),
-    due_date: z.date().refine((date) => date > new Date(), {
-      message: "未来の日付を入力してください",
+      .min(1, { message: "本文は1文字以上で入力してください" })
+      .max(100, { message: "本文は100文字以内で入力してください" }),
+    status_id: z.string({
+      required_error: "選択肢を選んでください",
     }),
+    due_date: z
+      .date()
+      .refine((date) => new Date(new Date().setHours(0, 0, 0, 0)), {
+        message: "未来の日付を入力してください",
+      }),
   });
-  
+
   const { id } = useParams();
   const router = useRouter();
 
-  const { data, error, isLoading } = useSWR<Todo>(
-    `http://localhost:3000/api/todos/${id}/edit`,
-    fetcher
-  );
+  const { data, error, isLoading } = useSWR<{
+    todo: Todo;
+    statuses: Status[];
+  }>(`http://localhost:3000/api/todos/${id}/edit`, fetcher);
 
+  const statuses = data?.statuses || [];
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       content: "",
+      status_id: "",
       due_date: new Date(),
     },
   });
@@ -68,9 +80,10 @@ const EditTodos = () => {
   useEffect(() => {
     if (data) {
       form.reset({
-        title: data.title,
-        content: data.content,
-        due_date: new Date(data.due_date),
+        title: data.todo.title,
+        content: data.todo.content,
+        status_id: data.todo.status_id ?? "",
+        due_date: new Date(data.todo.due_date),
       });
     }
   }, [data, form]);
@@ -124,6 +137,38 @@ const EditTodos = () => {
                 <FormLabel>本文</FormLabel>
                 <FormControl>
                   <Input placeholder="本文" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="status_id"
+            render={({ field }) => (
+              <FormItem>
+                <div>
+                  <FormLabel>ステータス</FormLabel>
+                </div>
+                <FormControl>
+                  <Select
+                    onValueChange={(value) => field.onChange(value)} // React Hook Form の field に値を反映
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="ステータス" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>ステータス</SelectLabel>
+                        {statuses.map((option) => (
+                          <SelectItem key={option.id} value={option.id}>
+                            {option.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
