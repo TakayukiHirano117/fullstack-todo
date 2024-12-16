@@ -1,10 +1,11 @@
 import prisma from "@/lib/prismaClient";
-// import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "../../../../utils/supabase/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
 
+  const searchParams = req.nextUrl.searchParams
+  const sortOrder = searchParams.get("sort") || "asc";
   const supabase = await createClient();
 
   const { data } = await supabase.auth.getUser();
@@ -12,6 +13,9 @@ export async function GET() {
   const allTodos = await prisma.todos.findMany({
     where: {
       user_id: data.user!.id,
+    },
+    orderBy: {
+      created_at: sortOrder as "asc" | "desc",
     },
   });
 
