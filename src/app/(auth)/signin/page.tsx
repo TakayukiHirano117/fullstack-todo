@@ -10,7 +10,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-export const formSchema = z.object({
+const formSchema = z.object({
   email: z.string()
     .email({ message: 'メールアドレスの形式が正しくありません' }),
   password: z.string()
