@@ -3,11 +3,11 @@ import prisma from "@/lib/prismaClient";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "../../../../utils/supabase/server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
 
   const supabase = await createClient();
 
-  const { data, error } = await supabase.auth.getUser();
+  const { data } = await supabase.auth.getUser();
 
   const allTodos = await prisma.todos.findMany({
     where: {
