@@ -1,6 +1,7 @@
 "use client";
 
 import { Todo } from "@/app/types/types";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,13 +9,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { format } from "date-fns";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiOutlinePencilAlt } from "react-icons/hi";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 const fetcher = async (url: string): Promise<Todo> => {
   const response = await fetch(url, { cache: "no-store" });
@@ -22,17 +24,32 @@ const fetcher = async (url: string): Promise<Todo> => {
   return response.json();
 };
 
-const TodoDetail = ({ params }: { params: { id: number } }) => {
+const TodoDetail = () => {
+  const router = useRouter();
   const { id } = useParams();
-  
+
   const { data, error, isLoading } = useSWR<Todo>(
     `http://localhost:3000/api/todos/${id}`,
     fetcher
   );
 
+  const handleDelete = async (id: number) => {
+    await fetch(`http://localhost:3000/api/todos/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    mutate(`http://localhost:3000/api/todos/${id}`);
+    await router.push("/todos");
+  };
+
   if (isLoading) return <p>データを読み込んでいます...</p>;
 
   if (error) return <p>エラーが発生しました: {error.message}</p>;
+
+  if (!data) return <p>データが見つかりません</p>;
 
   const todo = data!;
 
@@ -55,9 +72,26 @@ const TodoDetail = ({ params }: { params: { id: number } }) => {
             <Link href={`/todos/${todo.id}/edit`}>
               <HiOutlinePencilAlt className="hover:opacity-70" />
             </Link>
-            <Link href={`/todos/${todo.id}/delete`}>
-              <FaRegTrashAlt className="hover:opacity-70" />
-            </Link>
+            <Dialog>
+              <DialogTrigger asChild>
+                {/* <Button variant="outline">Edit Profile</Button> */}
+                <FaRegTrashAlt className="hover:opacity-70 cursor-pointer" />
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>本当に削除してよろしいですか？</DialogTitle>
+                </DialogHeader>
+                <DialogFooter>
+                  <Button
+                    type="submit"
+                    className="bg-red-600"
+                    onClick={() => handleDelete(todo.id)}
+                  >
+                    削除
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </CardFooter>
       </Card>

@@ -9,11 +9,20 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import React from "react";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { format } from "date-fns";
 import { Todo } from "@/app/types/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const fetcher = async (url: string) => {
   const response = await fetch(url, {
@@ -26,6 +35,17 @@ const fetcher = async (url: string) => {
 };
 
 const AllTodos = () => {
+  const handleDelete = async (id: number) => {
+    await fetch(`http://localhost:3000/api/todos/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    mutate("http://localhost:3000/api/todos");
+  };
+
   const {
     data: todos,
     error,
@@ -67,9 +87,29 @@ const AllTodos = () => {
                 <Link href={`/todos/${todo.id}/edit`}>
                   <HiOutlinePencilAlt className="hover:opacity-70" />
                 </Link>
-                <Link href={`/todos/${todo.id}/delete`}>
+                {/* <Link href={`/todos/${todo.id}/delete`}>
                   <FaRegTrashAlt className="hover:opacity-70" />
-                </Link>
+                </Link> */}
+                <Dialog>
+                  <DialogTrigger asChild>
+                    {/* <Button variant="outline">Edit Profile</Button> */}
+                    <FaRegTrashAlt className="hover:opacity-70 cursor-pointer" />
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>本当に削除してよろしいですか？</DialogTitle>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button
+                        type="submit"
+                        className="bg-red-600"
+                        onClick={() => handleDelete(todo.id)}
+                      >
+                        削除
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </CardFooter>
           </Card>

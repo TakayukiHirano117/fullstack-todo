@@ -56,9 +56,10 @@ export const formSchema = z.object({
     .string()
     .min(1, { message: "本文は1文字以上で入力してください" })
     .max(140, { message: "本文は100文字以内で入力してください" }),
-  status_id: z.string({
-    required_error: "選択肢を選んでください",
-  }),
+  status_id: z
+    .string({
+      required_error: "選択肢を選んでください",
+    }),
   due_date: z
     .date()
     .refine((date) => date >= new Date(new Date().setHours(0, 0, 0, 0)), {

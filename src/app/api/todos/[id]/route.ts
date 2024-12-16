@@ -33,14 +33,14 @@ export async function PUT(
   return NextResponse.json(todo);
 }
 
-// export async function DELETE(
-//   req: NextRequest,
-//   { params }: { params: { id: string } }
-// ) {
-//   const id = params.id;
-//   const todo = await prisma.todos.delete({
-//     where: { id: parseInt(id) },
-//   });
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id;
+  const todo = await prisma.todos.delete({
+    where: { id: id },
+  });
 
-//   return NextResponse.json(todo);
-// }
+  return NextResponse.json(todo);
+}
