@@ -9,7 +9,12 @@ export async function GET(
 
   const todo = await prisma.todos.findUnique({
     where: { id: id },
+    include: {
+      statuses: true,
+    }
   });
+
+  console.log(todo);
 
   return NextResponse.json(todo);
 }

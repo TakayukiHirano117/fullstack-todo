@@ -1,6 +1,7 @@
 "use client";
 
 import { Todo } from "@/app/types/types";
+import StatusBadge from "@/components/StatusBadge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -63,6 +64,9 @@ const TodoDetail = () => {
         </CardHeader>
         <CardContent className="break-words">
           <p>{todo.content}</p>
+        </CardContent>
+        <CardContent className="break-words">
+          <StatusBadge text={todo.statuses.name} />
         </CardContent>
         <CardFooter className="flex justify-between">
           <span className="text-sm">
