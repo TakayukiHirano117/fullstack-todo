@@ -47,7 +47,7 @@ export const formSchema = z.object({
   }),
 });
 
-const EditTodos = ({ params }: { params: { id: number } }) => {
+const EditTodos = () => {
   const { id } = useParams();
   const router = useRouter();
 

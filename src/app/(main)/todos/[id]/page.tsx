@@ -24,7 +24,7 @@ const fetcher = async (url: string): Promise<Todo> => {
   return response.json();
 };
 
-const TodoDetail = ({ params }: { params: { id: number } }) => {
+const TodoDetail = () => {
   const router = useRouter();
   const { id } = useParams();
 
