@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import useSWR, { mutate } from "swr";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiOutlinePencilAlt } from "react-icons/hi";
@@ -23,18 +23,45 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 const fetcher = async (url: string) => {
   const response = await fetch(url, {
     method: "GET",
     cache: "no-store",
-    credentials: "same-origin",
+    credentials: "include",
   });
   if (!response.ok) throw new Error("データの取得に失敗しました");
   return response.json();
 };
 
+const sortSchema = z.object({
+  sortOrder: z.enum(["asc", "desc"], {
+    required_error: "並べ替え順を選択してください",
+  }),
+});
+
+type SortFormData = z.infer<typeof sortSchema>;
+
 const AllTodos = () => {
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<SortFormData>({
+    resolver: zodResolver(sortSchema),
+    defaultValues: {
+      sortOrder: "asc",
+    },
+  });
+
+  const sortOrder = watch("sortOrder");
+
   const handleDelete = async (id: number) => {
     await fetch(`http://localhost:3000/api/todos/${id}`, {
       method: "DELETE",
@@ -50,15 +77,35 @@ const AllTodos = () => {
     data: todos,
     error,
     isLoading,
-  } = useSWR<Todo[]>("http://localhost:3000/api/todos", fetcher);
+  } = useSWR<Todo[]>(
+    `http://localhost:3000/api/todos?sort=${sortOrder}`,
+    fetcher
+  );
 
-  if (isLoading) return <p>データを読み込んでいます...</p>;
+  if (isLoading) return <p>Loading...</p>;
 
   if (error) return <p>エラーが発生しました: {error.message}</p>;
 
   return (
     <div className="p-8 flex flex-col gap-8">
-      <h1 className="text-4xl">✅ Todo一覧</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-4xl">✅ Todo一覧</h1>
+        <Select
+          onValueChange={(value) => setValue("sortOrder", value as "asc" | "desc")}
+          value={sortOrder}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="並べ替え" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>並べ替え</SelectLabel>
+              <SelectItem value="asc">作成日の昇順</SelectItem>
+              <SelectItem value="desc">作成日の降順</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
       <div className="grid lg:grid-cols-4 sm:grid-cols-3 gap-4 w-full">
         {todos!.map((todo) => (
           <Card
