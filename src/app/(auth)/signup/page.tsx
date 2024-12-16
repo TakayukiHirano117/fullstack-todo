@@ -17,16 +17,18 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export const formSchema = z.object({
-  email: z
-    .string()
-    .email({ message: "メールアドレスの形式が正しくありません" }),
-  password: z
-    .string()
-    .min(8, { message: "パスワードは8文字以上で入力してください" }),
-});
+
 
 const Signup = () => {
+  const formSchema = z.object({
+    email: z
+      .string()
+      .email({ message: "メールアドレスの形式が正しくありません" }),
+    password: z
+      .string()
+      .min(8, { message: "パスワードは8文字以上で入力してください" }),
+  });
+  
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
