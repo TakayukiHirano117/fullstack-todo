@@ -30,15 +30,15 @@ type TodoCardProps = {
 };
 
 const TodoCard: React.FC<TodoCardProps> = ({ todo, onDelete }) => {
-  const handleDelete = async () => {
-    await fetch(`http://localhost:3000/api/todos/${todo.id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    onDelete();
-  };
+//   const handleDelete = async () => {
+//     await fetch(`http://localhost:3000/api/todos/${todo.id}`, {
+//       method: "DELETE",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     });
+//     onDelete();
+//   };
 
   return (
     <Card className="w-full h-64 flex flex-col justify-between">
@@ -75,7 +75,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ todo, onDelete }) => {
                 <Button
                   type="submit"
                   className="bg-red-600"
-                  onClick={handleDelete}
+                  onClick={onDelete}
                 >
                   削除
                 </Button>
