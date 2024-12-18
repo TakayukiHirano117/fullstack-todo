@@ -63,6 +63,7 @@ const Sidebar = memo(({ user }: { user: User | null }) => {
               <div className="flex flex-col gap-2 my-2">
                 <div className="flex items-center justify-between">
                   <p className="truncate">{user.email}</p>
+                  {/* <p className="truncate">{user.name ? user.name : ""}</p> */}
                   <Link
                     href={"/mypage"}
                     className="p-2 rounded-full cursor-pointer hover:bg-slate-500 duration-300"
