@@ -23,7 +23,7 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const id = params.id;
+  const id = (await params).id;
   const { title, content, status_id, due_date } = await req.json();
 
   const todo = await prisma.todos.update({
