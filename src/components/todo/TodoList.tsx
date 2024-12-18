@@ -33,7 +33,7 @@ const TodoList = () => {
   if (error) return <p>エラーが発生しました: {error.message}</p>;
 
   return (
-    <div className="p-8 flex flex-col gap-8">
+    <div className="flex flex-col gap-8">
       <div className="flex justify-between items-center">
         <PageTitle text="✅ Todo一覧" />
         <SelectBox value={sortOrder} onChange={setSortOrder} />

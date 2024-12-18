@@ -14,8 +14,6 @@ export async function GET(
     }
   });
 
-  console.log(todo);
-
   return NextResponse.json(todo);
 }
 

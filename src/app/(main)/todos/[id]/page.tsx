@@ -2,7 +2,6 @@
 
 import { Todo } from "@/app/types/types";
 import StatusBadge from "@/components/StatusBadge";
-import TodoCard from "@/components/todo/TodoCard";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -57,13 +56,49 @@ const TodoDetail = () => {
 
   return (
     <div className="flex flex-col justify-center items-center h-full">
-      <div className="w-1/3 flex flex-col justify-center">
-        <TodoCard
-          key={todo.id}
-          todo={todo}
-          onDelete={() => mutate("http://localhost:3000/api/todos")}
-        />
-      </div>
+      <Card className="w-1/3 flex flex-col justify-center">
+        <CardHeader>
+          <CardTitle>
+            <p>{todo.title}</p>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="break-words">
+          <p>{todo.content}</p>
+        </CardContent>
+        <CardContent className="break-words">
+          <StatusBadge text={todo.statuses.name} />
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <span className="text-sm">
+            期限：{format(new Date(todo.due_date), "yyyy/MM/dd")}
+          </span>
+          <div className="flex gap-1">
+            <Link href={`/todos/${todo.id}/edit`}>
+              <HiOutlinePencilAlt className="hover:opacity-70" />
+            </Link>
+            <Dialog>
+              <DialogTrigger asChild>
+                {/* <Button variant="outline">Edit Profile</Button> */}
+                <FaRegTrashAlt className="hover:opacity-70 cursor-pointer" />
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>本当に削除してよろしいですか？</DialogTitle>
+                </DialogHeader>
+                <DialogFooter>
+                  <Button
+                    type="submit"
+                    className="bg-red-600"
+                    onClick={() => handleDelete(todo.id)}
+                  >
+                    削除
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </CardFooter>
+      </Card>
     </div>
   );
 };
