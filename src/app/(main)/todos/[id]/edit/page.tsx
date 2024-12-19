@@ -26,12 +26,23 @@ import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import BackButton from "@/components/BackButton";
 
-const fetcher = async (url: string): Promise<{
-    todo: Todo;
-    statuses: Status[];
-  }> => {
+const fetcher = async (
+  url: string
+): Promise<{
+  todo: Todo;
+  statuses: Status[];
+}> => {
   const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) throw new Error("データの取得に失敗しました");
   return response.json();
@@ -66,7 +77,7 @@ const EditTodos = () => {
   }>(`http://localhost:3000/api/todos/${id}/edit`, fetcher);
 
   const statuses = data?.statuses || [];
-  
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -216,6 +227,9 @@ const EditTodos = () => {
           <Button type="submit">Submit</Button>
         </form>
       </Form>
+      <div className="flex justify-end">
+        <BackButton />
+      </div>
     </div>
   );
 };
