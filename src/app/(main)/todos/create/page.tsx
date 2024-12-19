@@ -35,6 +35,8 @@ import {
 } from "@/components/ui/select";
 import useSWR from "swr";
 import { Status } from "@/app/types/types";
+import Overlay from "@/components/overlay/Overlay";
+import { Dialog } from "@/components/ui/dialog";
 
 const fetcher = async (url: string): Promise<{ statuses: Status[] }> => {
   const response = await fetch(url, { cache: "no-store" });
@@ -79,6 +81,8 @@ const CreateTodos = () => {
       due_date: new Date(),
     },
   });
+
+  const { isSubmitting } = form.formState;
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
@@ -205,7 +209,9 @@ const CreateTodos = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            Submit
+          </Button>
         </form>
       </Form>
     </div>

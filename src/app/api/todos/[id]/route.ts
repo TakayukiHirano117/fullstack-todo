@@ -14,8 +14,6 @@ export async function GET(
     }
   });
 
-  console.log(todo);
-
   return NextResponse.json(todo);
 }
 
@@ -43,7 +41,7 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const id = params.id;
+  const id = (await params).id;
   const todo = await prisma.todos.delete({
     where: { id: id },
   });
