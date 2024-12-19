@@ -30,6 +30,7 @@ const Signin = () => {
     },
   })
 
+  // onSubmitごとカスタムフックにしなくてはいけない。
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await fetch("http://localhost:3000/api/auth/signin/", {
@@ -53,7 +54,6 @@ const Signin = () => {
           ユーザー登録がまだの方はこちら
         </Link>
       </div>
-      {/* <SupabaseListerner /> */}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
