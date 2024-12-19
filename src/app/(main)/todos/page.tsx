@@ -71,7 +71,7 @@ const AllTodos = () => {
       },
     });
 
-    mutate("http://localhost:3000/api/todos");
+    mutate(`http://localhost:3000/api/todos?sort=${sortOrder}`);
   };
 
   const {

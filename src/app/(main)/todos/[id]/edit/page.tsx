@@ -26,12 +26,23 @@ import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import BackButton from "@/components/BackButton";
 
-const fetcher = async (url: string): Promise<{
-    todo: Todo;
-    statuses: Status[];
-  }> => {
+const fetcher = async (
+  url: string
+): Promise<{
+  todo: Todo;
+  statuses: Status[];
+}> => {
   const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) throw new Error("データの取得に失敗しました");
   return response.json();
@@ -47,9 +58,7 @@ const EditTodos = () => {
       .string()
       .min(1, { message: "本文は1文字以上で入力してください" })
       .max(100, { message: "本文は100文字以内で入力してください" }),
-    status_id: z.string({
-      required_error: "選択肢を選んでください",
-    }),
+    status_id: z.string().min(1, { message: "ステータスを選択してください" }),
     due_date: z
       .date()
       .refine((date) => new Date(new Date().setHours(0, 0, 0, 0)), {
@@ -66,7 +75,7 @@ const EditTodos = () => {
   }>(`http://localhost:3000/api/todos/${id}/edit`, fetcher);
 
   const statuses = data?.statuses || [];
-  
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -89,7 +98,6 @@ const EditTodos = () => {
   }, [data, form]);
 
   if (isLoading) return <p>データを読み込んでいます...</p>;
-
   if (error) return <p>エラーが発生しました: {error.message}</p>;
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -152,8 +160,8 @@ const EditTodos = () => {
                 </div>
                 <FormControl>
                   <Select
-                    onValueChange={(value) => field.onChange(value)} // React Hook Form の field に値を反映
-                    defaultValue={field.value}
+                    onValueChange={(value) => field.onChange(value)}
+                    {...field}
                   >
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="ステータス" />
@@ -217,6 +225,9 @@ const EditTodos = () => {
           <Button type="submit">Submit</Button>
         </form>
       </Form>
+      <div className="flex justify-end">
+        <BackButton />
+      </div>
     </div>
   );
 };
