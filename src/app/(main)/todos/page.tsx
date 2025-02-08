@@ -29,6 +29,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import StatusBadge from "@/components/StatusBadge";
 
+const baseUrl = process.env.NEXT_PUBLIC_PRODUCTION_URL || "http://localhost:3000";
+
+
 const fetcher = async (url: string) => {
   const response = await fetch(url, {
     method: "GET",
@@ -64,14 +67,14 @@ const AllTodos = () => {
   const sortOrder = watch("sortOrder");
 
   const handleDelete = async (id: number) => {
-    await fetch(`http://localhost:3000/api/todos/${id}`, {
+    await fetch(`${baseUrl}/api/todos/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
     });
 
-    mutate(`http://localhost:3000/api/todos?sort=${sortOrder}`);
+    mutate(`${baseUrl}/api/todos?sort=${sortOrder}`);
   };
 
   const {
@@ -79,7 +82,7 @@ const AllTodos = () => {
     error,
     isLoading,
   } = useSWR<Todo[]>(
-    `http://localhost:3000/api/todos?sort=${sortOrder}`,
+    `${baseUrl}/api/todos?sort=${sortOrder}`,
     fetcher
   );
 

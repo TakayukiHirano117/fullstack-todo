@@ -35,6 +35,10 @@ import {
 } from "@/components/ui/select";
 import { useStatus } from "@/hooks/useStatus";
 
+const baseUrl =
+  process.env.NEXT_PUBLIC_PRODUCTION_URL || "http://localhost:3000";
+
+
 const CreateTodos = () => {
   const formSchema = z.object({
     title: z
@@ -69,7 +73,7 @@ const CreateTodos = () => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await fetch("http://localhost:3000/api/todos/", {
+      await fetch(`${baseUrl}/api/todos/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
