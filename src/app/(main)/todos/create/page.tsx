@@ -33,15 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import useSWR from "swr";
-import { Status } from "@/app/types/types";
-
-const fetcher = async (url: string): Promise<{ statuses: Status[] }> => {
-  const response = await fetch(url, { cache: "no-store" });
-  if (!response.ok) throw new Error("データの取得に失敗しました");
-  const data = response.json();
-  return data;
-};
+import { useStatus } from "@/hooks/useStatus";
 
 const CreateTodos = () => {
   const formSchema = z.object({
@@ -63,10 +55,7 @@ const CreateTodos = () => {
 
   const router = useRouter();
 
-  const { data, error, isLoading } = useSWR<{ statuses: Status[] }>(
-    `http://localhost:3000/api/todos/create`,
-    fetcher
-  );
+  const { statuses, error, isLoading } = useStatus();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -151,9 +140,9 @@ const CreateTodos = () => {
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>ステータス</SelectLabel>
-                        {data?.statuses.map((option) => (
-                          <SelectItem key={option.id} value={option.id}>
-                            {option.name}
+                        {statuses?.map((status) => (
+                          <SelectItem key={status.id} value={status.id}>
+                            {status.name}
                           </SelectItem>
                         ))}
                       </SelectGroup>
