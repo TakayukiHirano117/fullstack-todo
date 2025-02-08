@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "../../../../../utils/supabase/server"
 import prisma from "@/lib/prismaClient"
 
-export const GET = async (req: NextRequest, res: NextResponse) => {
+export const GET = async (req: NextRequest) => {
     const supabase = await createClient()
 
     const {
@@ -38,8 +38,6 @@ export const PUT = async (req: NextRequest, res: NextResponse) => {
       name,
     },
   });
-
-  console.log(publicUser);
 
   return NextResponse.json({ publicUser });
 };
