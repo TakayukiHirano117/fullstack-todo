@@ -3,15 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-   const { id } = await params;
+  const { id } = await params;
 
   const todo = await prisma.todos.findUnique({
     where: { id: id },
     include: {
       statuses: true,
-    }
+    },
   });
 
   console.log(todo);
