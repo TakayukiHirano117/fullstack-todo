@@ -21,7 +21,7 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const id = (await params).id;
   const { title, content, status_id, due_date } = await req.json();
@@ -41,7 +41,7 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const id = params.id;
   const todo = await prisma.todos.delete({
