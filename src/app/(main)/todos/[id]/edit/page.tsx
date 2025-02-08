@@ -37,6 +37,10 @@ import {
 } from "@/components/ui/select";
 import BackButton from "@/components/BackButton";
 
+const baseUrl =
+  process.env.NEXT_PUBLIC_PRODUCTION_URL || "http://localhost:3000";
+
+
 const fetcher = async (
   url: string
 ): Promise<{
@@ -72,7 +76,7 @@ const EditTodos = () => {
   const { data, error, isLoading } = useSWR<{
     todo: Todo;
     statuses: Status[];
-  }>(`http://localhost:3000/api/todos/${id}/edit`, fetcher);
+  }>(`${baseUrl}/api/todos/${id}/edit`, fetcher);
 
   const statuses = data?.statuses || [];
 

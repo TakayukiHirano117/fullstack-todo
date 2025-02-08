@@ -17,6 +17,8 @@ import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import { z } from "zod";
 
+const baseUrl = process.env.NEXT_PUBLIC_PRODUCTION_URL || "http://localhost:3000";
+
 const fetcher = async (url: string) => {
   const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) throw new Error("データの取得に失敗しました");
@@ -45,7 +47,7 @@ const MyPage = () => {
   });
 
   const { data, error, isLoading } = useSWR(
-    "http://localhost:3000/api/auth/mypage",
+    `${baseUrl}/api/auth/mypage`,
     fetcher
   );
 
@@ -60,7 +62,7 @@ const MyPage = () => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await fetch(`http://localhost:3000/api/auth/mypage`, {
+      await fetch(`${baseUrl}/api/auth/mypage`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

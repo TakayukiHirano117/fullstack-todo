@@ -17,6 +17,9 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+const baseUrl = process.env.NEXT_PUBLIC_PRODUCTION_URL || "http://localhost:3000";
+
+
 const Signup = () => {
   const formSchema = z.object({
     email: z
@@ -39,7 +42,7 @@ const Signup = () => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await fetch("http://localhost:3000/api/auth/signup/", {
+      await fetch(`${baseUrl}/api/auth/signup/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

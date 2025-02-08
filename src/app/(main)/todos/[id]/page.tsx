@@ -25,24 +25,28 @@ const fetcher = async (url: string): Promise<Todo> => {
   return response.json();
 };
 
+const baseUrl =
+  process.env.NEXT_PUBLIC_PRODUCTION_URL || "http://localhost:3000";
+
+
 const TodoDetail = () => {
   const router = useRouter();
   const { id } = useParams();
 
   const { data, error, isLoading } = useSWR<Todo>(
-    `http://localhost:3000/api/todos/${id}`,
+    `${baseUrl}/api/todos/${id}`,
     fetcher
   );
 
   const handleDelete = async (id: number) => {
-    await fetch(`http://localhost:3000/api/todos/${id}`, {
+    await fetch(`${baseUrl}/api/todos/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
     });
 
-    mutate(`http://localhost:3000/api/todos/${id}`);
+    mutate(`${baseUrl}/api/todos/${id}`);
     await router.push("/todos");
   };
 
